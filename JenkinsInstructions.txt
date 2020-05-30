@@ -1,0 +1,38 @@
+Jenkins as docker steps
+-----------------------
+
+1. docker pull jenkins/jenkins:lts
+2. docker run -d --name jenkins-master -p 7070:8080 -p 50000:50000 -v /var/jenkins_home jenkins/jenkins:lts -- Create Jenkins container
+3. <docker-machine ip default>:7070
+4. docker exec jenkins-master cat /var/jenkins_home/secrets/initialAdminPassword -- get initial admin password (d3c83cbda7104775a6b3f905aeab064a)
+5. Install Suggested Plugins
+6. Create First Admin User
+7. Save And Continue
+8. The new page will appear - Instance configuration :- http://192.168.99.100:7070/
+
+Plugin Configurations
+-----------------------
+NodeJs
+------
+
+1. Go to Manage Jenkins -> Manage Plugins -> Installed Tab.
+2. If "NodeJS Plugin" is not installed, Install the same from "Available" Tab. Make sure to select "Restart after installation" option (jenkins will be restarted).
+3. Go to Manage Plugins -> Global Tool Configuration
+4. Check "NodeJS" section and click "Add NodeJS". Give a name and select Installed version. Save the change.
+5. In the Pipeline Code make sure to select "nodejs: Provide Node & npm bin/ folder to PATH" task. Please run all node and npm commands inside its context.
+  E.g :-
+  nodejs('default') {
+            sh label: '', script: 'node -v'
+        }
+
+Docker
+------
+
+1. While creating Jenkins Container mount Host docker.sock and /usr/local/bin/docker folder 
+
+  docker run -d --name jenkins-master -p 7070:8080 -p 50000:50000 -v "/var/run/docker.sock:/var/run/docker.sock" -v "/usr/local/bin/docker:/usr/bin/docker" -v /var/jenkins_home --restart unless-stopped jenkins/jenkins:lts
+  
+ 2. Go inside container shell as root ("-u 0" or "--privileged=true") and check docker commands.
+ 3. change permission for "/var/run/docker.sock" 
+   chmod 777 /var/run/docker.sock
+ 4. Go inside container shell as normal user and verify docker commands.
