@@ -2,7 +2,7 @@ Jenkins as docker steps
 -----------------------
 
 1. docker pull jenkins/jenkins:lts
-2. docker run -d --name jenkins-master -p 7070:8080 -p 50000:50000 -v /var/jenkins_home jenkins/jenkins:lts -- Create Jenkins container
+2. docker run -d --name jenkins-master -p 7070:8080 -p 50000:50000 -v "/var/run/docker.sock:/var/run/docker.sock" -v "/usr/local/bin/docker:/usr/bin/docker" -v /var/jenkins_home --restart unless-stopped jenkins/jenkins:lts
 3. <docker-machine ip default>:7070
 4. docker exec jenkins-master cat /var/jenkins_home/secrets/initialAdminPassword -- get initial admin password (d3c83cbda7104775a6b3f905aeab064a)
 5. Install Suggested Plugins
