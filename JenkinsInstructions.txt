@@ -38,6 +38,18 @@ NodeJs
         sh label: 'Check Node version', script: "${nodeToolPath}/bin/node -v"
         sh label: 'Check Npm version', script: "ls ${nodeToolPath}/bin/npx"
     }
+
+Configure ssh in Remote Host
+----------------------------
+1. Launch Bash and ssh-keygen
+2. copy the id_rsa.pub (or copy the key in case configured elesewhere) and go to the user shell of the remote host
+   ~/.ssh/authorized_keys
+3. chown <user>:<usergrp> ~/.ssh
+4. chown <user>:<usergrp> ~/.ssh/authorized_keys (In case Step 3 does not change authorized_keys)
+5.Copy value of Step. 2 in ~/.ssh/authorized_keys
+6. Now try ssh -o StrictHostKeyChecking=no <user>@<Virtual-Host-ip>
+
+
 Docker
 ------
 
